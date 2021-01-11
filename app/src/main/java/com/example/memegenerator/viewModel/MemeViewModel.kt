@@ -8,9 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.memegenerator.repository.MainRepository
 import com.example.memegenerator.room.MemeEntity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MemeViewModel
 @ViewModelInject
@@ -23,7 +21,15 @@ constructor(private val repository: MainRepository
 
     fun updateLiveData(){
         GlobalScope.launch {
-            _data.value=repository.getMeme()
+            _data.postValue(repository.getMeme())
         }
+    }
+    fun getData():Deferred<List<MemeEntity>>{
+        return GlobalScope.async {
+            repository.getMeme()
+        }
+    }
+    fun deleteData(){
+
     }
 }

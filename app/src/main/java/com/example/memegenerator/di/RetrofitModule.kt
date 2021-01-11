@@ -1,12 +1,15 @@
 package com.example.memegenerator.di
 
 import com.example.memegenerator.retrofit.MemeRetrofit
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
@@ -15,15 +18,15 @@ import javax.inject.Singleton
 object RetrofitModule {
     @Singleton
     @Provides
-    fun getMoshi(): Moshi {
-        return Moshi.Builder().build()
+    fun getMoshi(): Gson {
+        return GsonBuilder().create()
     }
 
     @Singleton
     @Provides
-    fun provideRetrofit(moshi: Moshi): Retrofit.Builder {
+    fun provideRetrofit(gson: Gson): Retrofit.Builder {
         return Retrofit.Builder().baseUrl("https://meme-api.herokuapp.com/")
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(GsonConverterFactory.create(gson))
     }
 
     @Singleton
